@@ -1,0 +1,52 @@
+name: AddressWhitelist
+author: MeMyself
+description: Address-based whitelisting.
+
+version: 1.0
+main: io.memyself.addresswhitelist.AddressWhitelist
+
+softdepend: [GeoipAPI]
+
+commands:
+  addresswhitelist:
+    description: Main AddressWhitelist command.
+    aliases: [aw]
+
+permissions:
+  addresswhitelist.*:
+    description: All AddressWhitelist permission nodes.
+    children:
+      addresswhitelist.session: true
+      addresswhitelist.list: true
+      addresswhitelist.mode: true
+      addresswhitelist.add: true
+      addresswhitelist.remove: true
+      addresswhitelist.notify: true
+      addresswhitelist.reload: true
+  addresswhitelist.manage:
+    description: AddressWhitelist IP address list management permission nodes.
+    default: false
+    children:
+      addresswhitelist.add: true
+      addresswhitelist.remove: true
+  addresswhitelist.session:
+    description: Needed for the /aw session command.
+    default: op
+  addresswhitelist.list:
+    description: Needed for the /aw list command.
+    default: op
+  addresswhitelist.mode:
+    description: Needed for the /aw mode command.
+    default: op
+  addresswhitelist.add:
+    description: Needed for the /aw add command.
+    default: op
+  addresswhitelist.remove:
+    description: Needed for the /aw remove command.
+    default: op
+  addresswhitelist.notify:
+    description: Be notified when a player attempts to join but is denied because their IP address is either blacklisted or not whitelisted.
+    default: op
+  addresswhitelist.reload:
+    description: Needed for the /aw reload command.
+    default: op

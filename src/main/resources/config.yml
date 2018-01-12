@@ -1,0 +1,122 @@
+#     .       .    .               .  .   .  ..         .      .          .
+#    / \      |    |                \  \ /  / |      o _|_     |   o     _|_
+#   /___\  .-.| .-.| .--..-. .--..--.\  \  /  |--.   .  |  .-. |   .  .--.|
+#  /     \(   |(   | |  (.-' `--.`--. \/ \/   |  |   |  | (.-' |   |  `--.|
+# '       ``-'`-`-'`-'   `--'`--'`--'  ' '    '  `--' `-`-'`--'`--' `-`--'`-'
+
+# Address-based whitelisting.
+
+# Colour Codes: http://ess.khhq.net/mc/
+
+# Options
+
+options:
+  # Set this to true if you want the plugin to function as a blacklist instead of a whitelist.
+  inverted: false
+  # The session GUI displays login attempts denied by AddressWhitelist since it was last (re)loaded.
+  # You can access the session GUI with the /aw session command, which requires the addresswhitelist.session permission node.
+  session-gui:
+    # Title of the session GUI.
+    title: Denied Login Attempts
+    # Size of the GUI, also indicates how many denied login attempts will be shown at maximum.
+    # All denied login attempts are stored until the plugin is unloaded, so you may increase this value and reload the plugin using /aw reload to show more denied login attempts.
+    # Must be a multiple of 9, up to 54.
+    size: 18
+    # Used for the %timestamp% placeholder.
+    # https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
+    date-format: 'MM-dd-yyyy hh:mm:ss a z'
+    # Appearance of the session GUI items.
+    # Available placeholders: %player_name%, %player_uuid%, %timestamp%, %ip_address%, %ip_address_location% (requires GeoipAPI), %ip_address_status%, %login_denial_reason%
+    item:
+      display-name: '&e%player_name%'
+      lore:
+        - '&7&o%timestamp%'
+        - '&r'
+        - '&aIP Address: &b%ip_address%'
+        - '&aIP Address Location: &b%ip_address_location%'
+        - '&aReason: &b%login_denial_reason%'
+        - '&r'
+        - '&aIP Address Status: &b%ip_address_status%'
+  # Should extra information about the plugin be printed to the console?
+  debug: false
+  # Should statistics for this plugin be submitted to bStats.org?
+  # A full plugin reload is required for changes to this option to be applied.
+  metrics: true
+
+list:
+- 127.0.0.1
+
+# Locale
+
+locale:
+  # Broadcasted to players with the addresswhitelist.notify permission node when a player attempts to join but is denied.
+  notifications:
+    # Broadcasted if the player's IP address is not whitelisted.
+    join-attempt-not-whitelisted: '&3&lAddressWhitelist &8&l» &e%player_name% &aattempted to join but was denied because their IP address (&b%ip_address%&a) is not whitelisted.'
+    # Broadcasted if the player's IP address is blacklisted.
+    join-attempt-blacklisted: '&3&lAddressWhitelist &8&l» &e%player_name% &aattempted to join but was denied because their IP address (&b%ip_address%&a) is blacklisted.'
+  # Returned when a player adds an IP address to the list using /aw add command.
+  address-added-to-list: '&3&lAddressWhitelist &8&l» &b%ip_address% &aadded to list.'
+  # Returned when a player removes an IP address from the list using the /aw remove command.
+  address-removed-from-list: '&3&lAddressWhitelist &8&l» &b%ip_address% &aremoved from list.'
+  # Returned when a player changes the list mode (whitelist/blacklist, see inverted option) using the /aw mode command.
+  mode-changed: '&3&lAddressWhitelist &8&l» &aChanged to %mode% mode!'
+  # Returned when a player attempts to open up the session GUI using the /aw session command, but there have not been any denied login attempts.
+  no-denied-login-attempts: '&3&lAddressWhitelist &8&l» &aThere haven''t been any denied login attempts so far.'
+  # Returned after a successful attempt to reload the plugin's configuration using the /aw reload command.
+  config-reloaded: '&3&lAddressWhitelist &8&l» &aConfiguration reloaded.'
+  # /aw list command output.
+  list:
+    # Header of the list.
+    header: '&8&m------------&r &3%mode%ed IP Addresses &8&m------------'
+    # Printed for each IP address in the list.
+    entry: '&8• &b%ip_address% &8- &aLocation: &b%ip_address_location%' # GeoipAPI needs to be loaded and enabled in order for the %location% placeholder to function properly. https://www.spigotmc.org/resources/api-geoip.28015/
+    # Footer of the list.
+    footer: ''
+  # Returned when a player executes /aw, without any sub-commands.
+  command-usage: '&3&lAddressWhitelist &8&l» &aUsage: &b/aw <reload|session|list|mode|add|remove>'
+  # Placeholder customization.
+  placeholders:
+    # %ip_address_location%
+    ip-address-location:
+      # The location of an invalid IP address was requested.
+      invalid-address: '&cUnknown (Invalid Address)'
+      # The location of a local or loopback IP address was requested.
+      local-loopback-address: '&cUnknown (Local/Loopback Address)'
+      # GeoipAPI was not found on the server.
+      geoipapi-not-found: '&cUnknown (GeoipAPI Required)'
+      # The location of the IP address requested was not found in the database.
+      unknown-location: '&cUnknown'
+    # %ip_address_status%
+    ip-address-status:
+      # The IP address is whitelisted.
+      whitelisted: Whitelisted
+      # The IP address is blacklisted.
+      blacklisted: '&cBlacklisted'
+      # The IP address is not whitelisted.
+      not-whitelisted: '&cNot Whitelisted'
+      # The IP address is not blacklisted.
+      not-blacklisted: Not Blacklisted
+    # %login_denial_reason%
+    login-denial-reason:
+      # The IP address was blacklisted.
+      blacklisted: Blacklisted
+      # The IP address was not whitelisted.
+      not-whitelisted: Not Whitelisted
+  # Kick messages.
+  kick-messages:
+    # Kick message for players with IP addresses not whitelisted.
+    not-in-whitelist: 'Your IP address is not whitelisted on this server!'
+    # Kick message for players with blacklisted IP addresses.
+    in-blacklist: 'Your IP address is blacklisted on this server!'
+  error:
+    # Returned when an attempt is made to add an IP address to the list, but it is already listed.
+    address-already-listed: '&3&lAddressWhitelist &8&l» &c%ip_address% is already listed.'
+    # Returned when an attempt is made to remove an IP address from the list, but it is not listed.
+    address-not-listed: '&3&lAddressWhitelist &8&l» &c%ip_address% is not listed.'
+    # Returned when a player provides an invalid sub-command or argument for the /aw command.
+    invalid-arguments: '&3&lAddressWhitelist &8&l» &cInvalid arguments provided.'
+    # Returned after an attempt to run an AddressWhitelist command that can only be executed by players as something else (console, command block, etc.)
+    only-player-sender: '&3&lAddressWhitelist &8&l» &cThat command can only be executed by players!'
+    # Returned when a player attempts to run a AddressWhitelist command, but they don't have permission to.
+    no-permission: '&3&lAddressWhitelist &8&l» &cNo permission.'
