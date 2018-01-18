@@ -43,6 +43,7 @@ options:
   # A full plugin reload is required for changes to this option to be applied.
   metrics: true
 
+# CIDR ranges are supported.
 list:
 - 127.0.0.1
 
@@ -81,6 +82,8 @@ locale:
     ip-address-location:
       # The location of an invalid IP address was requested.
       invalid-address: '&cUnknown (Invalid Address)'
+      # The location of a CIDR range was requested.
+      cidr-range: '&cUnknown (CIDR Range)'
       # The location of a local or loopback IP address was requested.
       local-loopback-address: '&cUnknown (Local/Loopback Address)'
       # GeoipAPI was not found on the server.

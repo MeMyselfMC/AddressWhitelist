@@ -38,13 +38,13 @@ public class AddressWhitelist
 		
 		for(Player player : getServer().getOnlinePlayers()) {
 			if(!getConfig().getBoolean("options.inverted")) {
-				if(!getConfig().getStringList("list").contains(player.getAddress().getHostString())) {
+				if(!Utilities.isIpAddressListed(player.getAddress().getHostString())) {
 					player.kickPlayer(ChatColor.translateAlternateColorCodes('&', getConfig().getString("locale.kick-messages.not-in-whitelist")));
 					
 					kickCount++;
 				}
 			} else {
-				if(getConfig().getStringList("list").contains(player.getAddress().getHostString())) {
+				if(Utilities.isIpAddressListed(player.getAddress().getHostString())) {
 					player.kickPlayer(ChatColor.translateAlternateColorCodes('&', getConfig().getString("locale.kick-messages.in-blacklist")));
 					
 					kickCount++;

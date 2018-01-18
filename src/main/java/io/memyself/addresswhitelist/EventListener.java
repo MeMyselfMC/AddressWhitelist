@@ -34,7 +34,7 @@ public class EventListener
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
 		if(!aw.getConfig().getBoolean("options.inverted")) {
-			if(!aw.getConfig().getStringList("list").contains(event.getAddress().getHostAddress())) {
+			if(!Utilities.isIpAddressListed(event.getAddress().getHostAddress())) {
 				event.setKickMessage(ChatColor.translateAlternateColorCodes('&', aw.getConfig().getString("locale.kick-messages.not-in-whitelist")));
 				event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_WHITELIST);
 				
@@ -52,7 +52,7 @@ public class EventListener
 				}
 			}
 		} else {
-			if(aw.getConfig().getStringList("list").contains(event.getAddress().getHostAddress())) {
+			if(Utilities.isIpAddressListed(event.getAddress().getHostAddress())) {
 				event.setKickMessage(ChatColor.translateAlternateColorCodes('&', aw.getConfig().getString("locale.kick-messages.in-blacklist")));
 				event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_OTHER);
 				

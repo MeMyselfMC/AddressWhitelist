@@ -54,13 +54,13 @@ public class CommandManager
 							
 							for(Player player : Bukkit.getOnlinePlayers()) {
 								if(!aw.getConfig().getBoolean("options.inverted")) {
-									if(!aw.getConfig().getStringList("list").contains(player.getAddress().getHostString())) {
+									if(!Utilities.isIpAddressListed(player.getAddress().getHostString())) {
 										player.kickPlayer(ChatColor.translateAlternateColorCodes('&', aw.getConfig().getString("locale.kick-messages.not-in-whitelist")));
 										
 										kickCount++;
 									}
 								} else {
-									if(aw.getConfig().getStringList("list").contains(player.getAddress().getHostString())) {
+									if(Utilities.isIpAddressListed(player.getAddress().getHostString())) {
 										player.kickPlayer(ChatColor.translateAlternateColorCodes('&', aw.getConfig().getString("locale.kick-messages.in-blacklist")));
 										
 										kickCount++;
@@ -102,7 +102,7 @@ public class CommandManager
 								
 								if(entryMsg != null && !entryMsg.isEmpty()) {
 									entryMsg = entryMsg.replaceAll("%ip_address%", entry);
-									entryMsg = entryMsg.replaceAll("%ip_address_location%", Utilities.getIpAddressLocation(entry));
+									entryMsg = entryMsg.replaceAll("%ip_address_location%", Utilities.getHumanReadableIpAddressLocation(entry));
 									
 									sender.sendMessage(ChatColor.translateAlternateColorCodes('&', entryMsg));
 								}
@@ -289,8 +289,8 @@ public class CommandManager
 		displayName = displayName.replaceAll("%player_uuid%", deniedLoginAttemptData[0]);
 		displayName = displayName.replaceAll("%timestamp%", timestamp);
 		displayName = displayName.replaceAll("%ip_address%", ip);
-		displayName = displayName.replaceAll("%ip_address_location%", Utilities.getIpAddressLocation(ip));
-		displayName = displayName.replaceAll("%ip_address_status%", Utilities.getIpAddressStatus(ip));
+		displayName = displayName.replaceAll("%ip_address_location%", Utilities.getHumanReadableIpAddressLocation(ip));
+		displayName = displayName.replaceAll("%ip_address_status%", Utilities.getHumanReadableIpAddressStatus(ip));
 		displayName = displayName.replaceAll("%login_denial_reason%", reason.equalsIgnoreCase("NOT_WHITELISTED") ? aw.getConfig().getString("locale.placeholders.login-denial-reason.not-whitelisted") : aw.getConfig().getString("locale.placeholders.login-denial-reason.blacklisted"));
 		meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', displayName));
 		
@@ -300,8 +300,8 @@ public class CommandManager
 			loreLine = loreLine.replaceAll("%player_uuid%", deniedLoginAttemptData[0]);
 			loreLine = loreLine.replaceAll("%timestamp%", timestamp);
 			loreLine = loreLine.replaceAll("%ip_address%", ip);
-			loreLine = loreLine.replaceAll("%ip_address_location%", Utilities.getIpAddressLocation(ip));
-			loreLine = loreLine.replaceAll("%ip_address_status%", Utilities.getIpAddressStatus(ip));
+			loreLine = loreLine.replaceAll("%ip_address_location%", Utilities.getHumanReadableIpAddressLocation(ip));
+			loreLine = loreLine.replaceAll("%ip_address_status%", Utilities.getHumanReadableIpAddressStatus(ip));
 			loreLine = loreLine.replaceAll("%login_denial_reason%", reason.equalsIgnoreCase("NOT_WHITELISTED") ? aw.getConfig().getString("locale.placeholders.login-denial-reason.not-whitelisted") : aw.getConfig().getString("locale.placeholders.login-denial-reason.blacklisted"));
 			
 			lore.add(ChatColor.translateAlternateColorCodes('&', loreLine));

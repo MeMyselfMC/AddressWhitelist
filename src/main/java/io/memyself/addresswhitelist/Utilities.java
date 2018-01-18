@@ -7,6 +7,8 @@ import org.bukkit.Bukkit;
 
 import eu.theindra.geoip.api.GeoIP;
 
+import org.apache.commons.net.util.SubnetUtils;
+
 public class Utilities {
 	
 	private static AddressWhitelist aw;
@@ -15,7 +17,19 @@ public class Utilities {
 		aw = instance;
 	}
 	
-	public static String getIpAddressLocation(String ip) {
+	public static boolean isIpAddressListed(String ip) {
+		for(String entry : aw.getConfig().getStringList("list")) {
+			try {
+				if(new SubnetUtils(entry).getInfo().isInRange(ip)) return true;
+			} catch(IllegalArgumentException ex) {
+				if(entry.equalsIgnoreCase(ip)) return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public static String getHumanReadableIpAddressLocation(String ip) {
 		InetAddress inetAddress = null;
 		
 		try {
@@ -42,12 +56,18 @@ public class Utilities {
 				} else return aw.getConfig().getString("locale.placeholders.ip-address-location.geoipapi-not-found");
 			}
 		} catch(UnknownHostException ex) {
-			return aw.getConfig().getString("locale.placeholders.ip-address-location.invalid-address");
+			try {
+				new SubnetUtils(ip);
+				
+				return aw.getConfig().getString("locale.placeholders.ip-address-location.cidr-range");
+			} catch(IllegalArgumentException e) {
+				return aw.getConfig().getString("locale.placeholders.ip-address-location.invalid-address");
+			}
 		}
 	}
 	
-	public static String getIpAddressStatus(String ip) {
-		if(aw.getConfig().getStringList("list").contains(ip)) {
+	public static String getHumanReadableIpAddressStatus(String ip) {
+		if(isIpAddressListed(ip)) {
 			if(aw.getConfig().getBoolean("options.inverted")) return aw.getConfig().getString("locale.placeholders.ip-address-status.blacklisted");
 			else return aw.getConfig().getString("locale.placeholders.ip-address-status.whitelisted");
 		} else {
