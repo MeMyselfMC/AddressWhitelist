@@ -2,7 +2,7 @@ name: AddressWhitelist
 author: MeMyself
 description: Address-based whitelisting.
 
-version: 1.0
+version: ${version}
 main: io.memyself.addresswhitelist.AddressWhitelist
 
 softdepend: [GeoipAPI]
